@@ -19,6 +19,9 @@ public class Graphics extends JPanel implements ActionListener {
     int[] snakePosY = new int[BOARD_SIZE];
     int snakeLength;
 
+    Food food;
+    int foodEaten;
+
     char direction = 'R';
     boolean isMoving = false;
     final Timer timer = new Timer(150, this);
@@ -66,8 +69,10 @@ public class Graphics extends JPanel implements ActionListener {
         snakePosX = new int[BOARD_SIZE];
         snakePosY = new int[BOARD_SIZE];
         snakeLength = 5;
+        foodEaten = 0;
         direction = 'R';
         isMoving = true;
+        spawanFood();
         timer.start();
     }
 
@@ -76,12 +81,18 @@ public class Graphics extends JPanel implements ActionListener {
         super.paintComponent(g);
 
         if(isMoving) {
+            // Food color
+            g.setColor(Color.BLUE);
+            g.fillOval(food.getPosX(), food.getPosY(), TICK_SIZE, TICK_SIZE);
+
+            // Snake color
             g.setColor(Color.green);
             for(int i = 0; i < snakeLength; i++) {
                 g.fillRect(snakePosX[i], snakePosY[i], TICK_SIZE, TICK_SIZE);
             }
         } else {
-            String scoreText = String.format("The End... Score: %d... Press any key to play again...", 0);
+            // Final message
+            String scoreText = String.format("The End... Score: %d... Press any key to play again...", foodEaten);
             g.setColor(Color.BLACK);
             g.setFont(font);
             g.drawString(scoreText, (WIDTH - getFontMetrics(g.getFont()).stringWidth(scoreText)) / 2, HEIGHT /2 );
@@ -100,6 +111,19 @@ public class Graphics extends JPanel implements ActionListener {
             case 'L' -> snakePosX[0] -= TICK_SIZE;
             case 'R' -> snakePosX[0] += TICK_SIZE;
         }
+    }
+
+    protected void spawanFood(){
+        food = new Food();
+    }
+
+    protected void eatFood(){
+        if((snakePosX[0] == food.getPosX()) && (snakePosX[0] == food.getPosY())){
+            snakeLength++;
+            foodEaten++;
+            spawanFood();
+        }
+
     }
 
     protected void colisionTest(){
@@ -125,6 +149,7 @@ public class Graphics extends JPanel implements ActionListener {
         if(isMoving){
             move();
             colisionTest();
+            eatFood();
         }
 
         repaint();
