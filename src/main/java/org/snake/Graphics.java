@@ -72,7 +72,7 @@ public class Graphics extends JPanel implements ActionListener {
         foodEaten = 0;
         direction = 'R';
         isMoving = true;
-        spawanFood();
+        spawnFood();
         timer.start();
     }
 
@@ -95,7 +95,7 @@ public class Graphics extends JPanel implements ActionListener {
             String scoreText = String.format("The End... Score: %d... Press any key to play again...", foodEaten);
             g.setColor(Color.BLACK);
             g.setFont(font);
-            g.drawString(scoreText, (WIDTH - getFontMetrics(g.getFont()).stringWidth(scoreText)) / 2, HEIGHT /2 );
+            g.drawString(scoreText, (WIDTH - getFontMetrics(g.getFont()).stringWidth(scoreText)) / 2, HEIGHT / 2);
         }
     }
 
@@ -113,15 +113,15 @@ public class Graphics extends JPanel implements ActionListener {
         }
     }
 
-    protected void spawanFood(){
+    protected void spawnFood(){
         food = new Food();
     }
 
     protected void eatFood(){
-        if((snakePosX[0] == food.getPosX()) && (snakePosX[0] == food.getPosY())){
+        if((snakePosX[0] == food.getPosX()) && (snakePosY[0] == food.getPosY())){
             snakeLength++;
             foodEaten++;
-            spawanFood();
+            spawnFood();
         }
 
     }
